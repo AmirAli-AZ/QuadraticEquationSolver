@@ -1,0 +1,22 @@
+.text-field {
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color: lightgray;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-font-size: 16px;
+}
+
+.text-field:error {
+    -fx-border-color: red;
+}
+
+.label {
+    -fx-font-size: 16px;
+}
+
+#equation {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
