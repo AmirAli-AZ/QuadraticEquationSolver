@@ -38,27 +38,9 @@ public class MainController implements Initializable {
         textFieldB.pseudoClassStateChanged(error, true);
         textFieldC.pseudoClassStateChanged(error, true);
 
-        textFieldA.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                textFieldA.pseudoClassStateChanged(error, true);
-                return;
-            }
-            textFieldA.pseudoClassStateChanged(error, !isNumber(newValue));
-        });
-        textFieldB.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                textFieldB.pseudoClassStateChanged(error, true);
-                return;
-            }
-            textFieldB.pseudoClassStateChanged(error, !isNumber(newValue));
-        });
-        textFieldC.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                textFieldC.pseudoClassStateChanged(error, true);
-                return;
-            }
-            textFieldC.pseudoClassStateChanged(error, !isNumber(newValue));
-        });
+        textFieldA.textProperty().addListener((observable, oldValue, newValue) -> textFieldA.pseudoClassStateChanged(error, !isNumber(newValue)));
+        textFieldB.textProperty().addListener((observable, oldValue, newValue) -> textFieldB.pseudoClassStateChanged(error, !isNumber(newValue)));
+        textFieldC.textProperty().addListener((observable, oldValue, newValue) -> textFieldC.pseudoClassStateChanged(error, !isNumber(newValue)));
 
         calculateButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
             return (!isNumber(textFieldA.getText()) || !isNumber(textFieldB.getText()) || !isNumber(textFieldC.getText()));
@@ -96,6 +78,9 @@ public class MainController implements Initializable {
     }
 
     public boolean isNumber(String string) {
+        if (string == null || string.isEmpty())
+            return false;
+
         try {
             Double.parseDouble(string);
             return true;
