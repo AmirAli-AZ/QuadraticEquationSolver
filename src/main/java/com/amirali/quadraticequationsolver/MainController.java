@@ -7,8 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,19 +16,13 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     @FXML
-    private TextField textFieldA;
-
-    @FXML
-    private TextField textFieldB;
-
-    @FXML
-    private TextField textFieldC;
+    private TextField textFieldA, textFieldB, textFieldC;
 
     @FXML
     private Button calculateButton;
 
     @FXML
-    private Label equation;
+    private Text textA, textB, textC;
 
     private final PseudoClass error = PseudoClass.getPseudoClass("error");
 
@@ -38,9 +32,33 @@ public class MainController implements Initializable {
         textFieldB.pseudoClassStateChanged(error, true);
         textFieldC.pseudoClassStateChanged(error, true);
 
-        textFieldA.textProperty().addListener((observable, oldValue, newValue) -> textFieldA.pseudoClassStateChanged(error, !isNumber(newValue)));
-        textFieldB.textProperty().addListener((observable, oldValue, newValue) -> textFieldB.pseudoClassStateChanged(error, !isNumber(newValue)));
-        textFieldC.textProperty().addListener((observable, oldValue, newValue) -> textFieldC.pseudoClassStateChanged(error, !isNumber(newValue)));
+        textFieldA.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isNumber(newValue)) {
+                textFieldA.pseudoClassStateChanged(error, true);
+                textA.setText("a");
+                return;
+            }
+            textFieldA.pseudoClassStateChanged(error, false);
+            textA.setText(newValue);
+        });
+        textFieldB.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isNumber(newValue)) {
+                textFieldB.pseudoClassStateChanged(error, true);
+                textB.setText("+b");
+                return;
+            }
+            textFieldB.pseudoClassStateChanged(error, false);
+            textB.setText(Double.parseDouble(newValue) > 0 ? "+" + newValue : newValue);
+        });
+        textFieldC.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isNumber(newValue)) {
+                textFieldC.pseudoClassStateChanged(error, true);
+                textC.setText("+c");
+                return;
+            }
+            textFieldC.pseudoClassStateChanged(error, false);
+            textC.setText(Double.parseDouble(newValue) > 0 ? "+" + newValue : newValue);
+        });
 
         calculateButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
             return (!isNumber(textFieldA.getText()) || !isNumber(textFieldB.getText()) || !isNumber(textFieldC.getText()));
@@ -58,8 +76,6 @@ public class MainController implements Initializable {
             new Alert(Alert.AlertType.ERROR, "This equation is not solvable!").show();
             return;
         }
-
-        equation.setText(a + "x^2+" + b + "x+" + c + "=0");
 
         if (delta == 0) {
             final var result = -b/(2 * a);
