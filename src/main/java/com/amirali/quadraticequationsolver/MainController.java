@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -23,6 +24,9 @@ public class MainController implements Initializable {
 
     @FXML
     private Text textA, textB, textC;
+
+    @FXML
+    private VBox root, container;
 
     private final PseudoClass error = PseudoClass.getPseudoClass("error");
 
@@ -63,6 +67,8 @@ public class MainController implements Initializable {
         calculateButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
             return (!isNumber(textFieldA.getText()) || !isNumber(textFieldB.getText()) || !isNumber(textFieldC.getText()));
         }, textFieldA.textProperty(), textFieldB.textProperty(), textFieldC.textProperty()));
+
+        container.prefWidthProperty().bind(root.widthProperty().multiply(0.8));
     }
 
     public void calculate(ActionEvent actionEvent) {
